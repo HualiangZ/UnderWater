@@ -80,11 +80,17 @@ void AMyPlayer::SetEnterSub() {
 	UE_LOG(LogTemp, Warning, TEXT("can enter, %d"), canEnter);
 	if (canEnter) {
 		TArray<AActor*> Result;
-		GetOwner()->GetOverlappingActors(Result, AMySub::StaticClass());
-		AMySub* Sub = Cast<AMySub>(Result[0]);
-		AController* temp = GetController();
-		temp->UnPossess();
-		temp->Possess(Sub);
+		GetOverlappingActors(Result, AMySub::StaticClass());
+		for (AActor* r : Result) {
+			AMySub* Sub = Cast<AMySub>(r);
+			AController* temp = GetController();
+			SetActorEnableCollision(false);
+			SetActorHiddenInGame(true);
+			temp->UnPossess();
+			temp->Possess(Sub);
+			hasEnteredSun = true;
+		}
+
 	}
 }
 

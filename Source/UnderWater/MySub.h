@@ -19,6 +19,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
 	class UCameraComponent* Camera;
 
+	class UCapsuleComponent* c;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BoxColli")
 	class UBoxComponent* Box;

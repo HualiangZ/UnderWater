@@ -21,17 +21,18 @@ AMySub::AMySub()
 
 
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxColli"));
-	Box->SetupAttachment(GetRootComponent());
+	Box->SetupAttachment(GetMesh());
 	Box->OnComponentBeginOverlap.AddDynamic(this, &AMySub::Overlap);
 	Box->OnComponentEndOverlap.AddDynamic(this, &AMySub::OverlapEnd);
-
+	
 }
 
 // Called when the game starts or when spawned
 void AMySub::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	
 }
 
 // Called every frame
