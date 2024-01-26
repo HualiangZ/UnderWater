@@ -2,6 +2,7 @@
 
 
 #include "MyPlayer.h"
+#include "MySub.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <Kismet/GameplayStatics.h>
@@ -19,19 +20,21 @@ AMyPlayer::AMyPlayer()
 	Camera->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 	Camera->bUsePawnControlRotation = true;
 
+
 }
 
 // Called when the game starts or when spawned
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	
 }
 
 // Called every frame
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("%d"), isSwimming);
+	//E_LOG(LogTemp, Warning, TEXT("%d"), isSwimming);
 }
 
 // Called to bind functionality to input
@@ -45,6 +48,8 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMyPlayer::AddControllerPitchInput);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AMyPlayer::Jump);
+
+	PlayerInputComponent->BindAction(TEXT("EnterSub"), IE_Pressed, this, &AMyPlayer::SetEnterSub);
 }
 void AMyPlayer::MoveRight(float value) {
 	AddMovementInput(GetActorRightVector() * value);
@@ -68,6 +73,18 @@ void AMyPlayer::MoveBack(float value) {
 	}
 	else {
 		AddMovementInput(GetActorForwardVector() * value);
+	}
+}
+
+void AMyPlayer::SetEnterSub() {
+	UE_LOG(LogTemp, Warning, TEXT("can enter, %d"), canEnter);
+	if (canEnter) {
+		TArray<AActor*> Result;
+		GetOwner()->GetOverlappingActors(Result, AMySub::StaticClass());
+		AMySub* Sub = Cast<AMySub>(Result[0]);
+		AController* temp = GetController();
+		temp->UnPossess();
+		temp->Possess(Sub);
 	}
 }
 

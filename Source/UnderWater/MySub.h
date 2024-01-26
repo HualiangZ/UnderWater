@@ -4,28 +4,29 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MyPlayer.generated.h"
+#include "MySub.generated.h"
 
 UCLASS()
-class UNDERWATER_API AMyPlayer : public ACharacter
+class UNDERWATER_API AMySub : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	AMyPlayer();
+	AMySub();
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
 	class UCameraComponent* Camera;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BoxColli")
+	class UBoxComponent* Box;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Swim")
 	bool isSwimming = false;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enter")
-	bool canEnter = false;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Enter")
-	bool hasEnteredSun = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,8 +41,9 @@ public:
 	void MoveForward(float value);
 	void MoveBack(float value);
 	void MoveRight(float value);
-
-	void SetEnterSub();
-
-
+	
+	UFUNCTION()
+	void Overlap(UPrimitiveComponent* Overlapped, AActor* otherActor, UPrimitiveComponent* otherComp, int32 othrBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
+	UFUNCTION()
+	void OverlapEnd(class UPrimitiveComponent* Overlapped, class AActor* otherActor, class UPrimitiveComponent* otherComp, int32 othrBodyIndex);
 };
