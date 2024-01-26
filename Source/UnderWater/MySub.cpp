@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/BoxComponent.h"
+#include "Components/ArrowComponent.h"
 #include <Kismet/GameplayStatics.h>
 
 // Sets default values
@@ -19,6 +20,8 @@ AMySub::AMySub()
 	//Camera->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "Head");
 	Camera->bUsePawnControlRotation = true;
 
+	ArrowExit = CreateDefaultSubobject<UArrowComponent>(TEXT("ExitArrow"));
+	ArrowExit->SetupAttachment(GetRootComponent());
 
 	Box = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxColli"));
 	Box->SetupAttachment(GetMesh());
@@ -39,7 +42,7 @@ void AMySub::BeginPlay()
 void AMySub::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//UE_LOG(LogTemp, Warning, TEXT("%d"), isSwimming);
+	UE_LOG(LogTemp, Warning, TEXT("%d"), GetCharacterMovement()->IsSwimming());
 }
 
 // Called to bind functionality to input
@@ -51,6 +54,8 @@ void AMySub::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AMySub::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AMySub::AddControllerYawInput);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AMySub::AddControllerPitchInput);
+
+	PlayerInputComponent->BindAction(TEXT("EnterSub"), IE_Pressed, this, &AMySub::ExitSub);
 }
 
 void AMySub::MoveRight(float value) {
@@ -87,6 +92,22 @@ void AMySub::Overlap(UPrimitiveComponent* Overlapped, AActor* otherActor, UPrimi
 void AMySub::OverlapEnd(UPrimitiveComponent* Overlapped, AActor* otherActor, UPrimitiveComponent* otherComp, int32 othrBodyIndex) {
 	if (AMyPlayer* player = Cast<AMyPlayer>(otherActor)) {
 		player->canEnter = false;
+	}
+
+}
+
+
+void AMySub::ExitSub() {
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AMyPlayer::StaticClass(), FoundActors);
+	for (AActor* r : FoundActors) {
+		AMyPlayer* Player = Cast<AMyPlayer>(r);
+		AController* temp = GetController();
+		Player->SetActorEnableCollision(true);
+		Player->SetActorHiddenInGame(false);
+		Player->SetActorLocation(ArrowExit->GetComponentLocation());
+		temp->UnPossess();
+		temp->Possess(Player);
 	}
 
 }

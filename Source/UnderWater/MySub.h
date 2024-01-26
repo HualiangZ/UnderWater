@@ -19,14 +19,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Camera")
 	class UCameraComponent* Camera;
 
-	class UCapsuleComponent* c;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "ArrowExit")
+	class UArrowComponent* ArrowExit;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BoxColli")
 	class UBoxComponent* Box;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Swim")
 	bool isSwimming = false;
-
 
 protected:
 	// Called when the game starts or when spawned
@@ -43,6 +43,8 @@ public:
 	void MoveBack(float value);
 	void MoveRight(float value);
 	
+	void ExitSub();
+
 	UFUNCTION()
 	void Overlap(UPrimitiveComponent* Overlapped, AActor* otherActor, UPrimitiveComponent* otherComp, int32 othrBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 	UFUNCTION()
