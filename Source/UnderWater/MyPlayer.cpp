@@ -83,6 +83,7 @@ void AMyPlayer::SetEnterSub() {
 		GetOverlappingActors(Result, AMySub::StaticClass());
 		for (AActor* r : Result) {
 			AMySub* Sub = Cast<AMySub>(r);
+			Sub->hasPlayerEnter = true;
 			AController* temp = GetController();
 			SetActorEnableCollision(false);
 			SetActorHiddenInGame(true);

@@ -106,6 +106,7 @@ void AMySub::ExitSub() {
 		Player->SetActorEnableCollision(true);
 		Player->SetActorHiddenInGame(false);
 		Player->SetActorLocation(ArrowExit->GetComponentLocation());
+		hasPlayerEnter = false;
 		temp->UnPossess();
 		temp->Possess(Player);
 	}

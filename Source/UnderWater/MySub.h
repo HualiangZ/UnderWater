@@ -28,6 +28,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Swim")
 	bool isSwimming = false;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Swim")
+	bool hasPlayerEnter = false;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
