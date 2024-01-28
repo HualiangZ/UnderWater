@@ -2,6 +2,8 @@
 
 
 #include "FishAi.h"
+#include "Nodes.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFishAi::AFishAi()
@@ -16,6 +18,7 @@ void AFishAi::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AFishAi::GetAllNodes();
 }
 
 // Called every frame
@@ -32,3 +35,11 @@ void AFishAi::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void AFishAi::GetAllNodes() {
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ANodes::StaticClass(), nodeArray);
+	for (AActor* n : nodeArray) {
+		ANodes* node = Cast<ANodes>(n);
+		allVectors.Add(node->GetActorLocation());
+	}
+	int a = allVectors.Num();
+}
