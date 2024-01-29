@@ -3,7 +3,8 @@
 
 #include "FishAi.h"
 #include "Nodes.h"
-#include "Kismet/GameplayStatics.h"
+#include <Kismet/GameplayStatics.h>
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AFishAi::AFishAi()
@@ -17,15 +18,12 @@ AFishAi::AFishAi()
 void AFishAi::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	AFishAi::GetAllNodes();
 }
 
 // Called every frame
 void AFishAi::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -39,7 +37,7 @@ void AFishAi::GetAllNodes() {
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ANodes::StaticClass(), nodeArray);
 	for (AActor* n : nodeArray) {
 		ANodes* node = Cast<ANodes>(n);
-		allVectors.Add(node->GetActorLocation());
+		nodeArray.Add(node);
 	}
 	int a = allVectors.Num();
 }
